@@ -1,0 +1,4 @@
+/.devopsy/.env
+/.devopsy/mnt
+/.devopsy/compose.override.y*ml
+/.devopsy/targets.local.yaml

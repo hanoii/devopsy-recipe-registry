@@ -1,0 +1,50 @@
+#!/bin/sh
+## Description: Start or update the registry (run on the server by release)
+# Run on the server by `devopsy @<target> release deploy`, or locally.
+#
+# The first run generates the secrets into .env. Every run writes
+# mnt/auth/htpasswd when it does not match REGISTRY_USER and
+# REGISTRY_PASSWORD, so changing the password in .env and deploying applies it.
+set -eu
+
+env_file="$DEVOPSY_PROJECT_DIR/.env"
+auth_dir="$DEVOPSY_PROJECT_DIR/mnt/auth"
+
+# secret NAME: append a random value to .env unless NAME is already set there.
+secret() {
+  if ! grep -q "^$1=" "$env_file" 2>/dev/null; then
+    # Keep the new line separate when .env does not end with a newline.
+    if [ -s "$env_file" ] && [ "$(tail -c 1 "$env_file")" != "" ]; then
+      echo >> "$env_file"
+    fi
+    echo "$1=$(head -c 48 /dev/urandom | base64 | tr -d '\n' | tr '+/' '-_')" >> "$env_file"
+    echo "deploy: generated $1 in .env" >&2
+  fi
+}
+secret REGISTRY_PASSWORD
+secret REGISTRY_HTTP_SECRET
+
+# The values as written in .env: they were just generated, or set by hand
+# (keep them unquoted).
+user="$(sed -n 's/^REGISTRY_USER=//p' "$env_file" | tail -n 1)"
+user="${user:-devopsy}"
+password="$(sed -n 's/^REGISTRY_PASSWORD=//p' "$env_file" | tail -n 1)"
+
+devopsy pull --quiet registry init htpasswd
+
+# The password goes through stdin, never the command line. A running registry
+# restarts to read a new file.
+running="$(devopsy ps -q registry 2>/dev/null)"
+changed=
+mkdir -p "$auth_dir"
+if ! printf '%s\n' "$password" | devopsy run --rm -T -v "$auth_dir:/auth:ro" htpasswd -v -i /auth/htpasswd "$user" >/dev/null 2>&1; then
+  printf '%s\n' "$password" | devopsy run --rm -T htpasswd -n -i -B "$user" 2>/dev/null > "$auth_dir/htpasswd.new"
+  mv "$auth_dir/htpasswd.new" "$auth_dir/htpasswd"
+  echo "deploy: wrote mnt/auth/htpasswd for $user" >&2
+  changed=1
+fi
+
+devopsy up -d --wait --remove-orphans
+if [ -n "$changed" ] && [ -n "$running" ]; then
+  devopsy restart registry
+fi

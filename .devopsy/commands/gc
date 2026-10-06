@@ -1,0 +1,12 @@
+#!/bin/sh
+## Description: Free space from deleted tags (stops the registry meanwhile)
+# Removes untagged manifests and the layers nothing else uses: what deleting
+# a tag leaves behind. An image pushed only by digest, never tagged, goes too.
+# Pushes during a collection could lose layers, so the registry stops while it
+# runs. Arguments go to `registry garbage-collect`, like --dry-run.
+set -eu
+devopsy stop registry
+status=0
+devopsy run --rm --no-deps -T registry garbage-collect --delete-untagged "$@" /etc/distribution/config.yml || status=$?
+devopsy start registry
+exit "$status"
