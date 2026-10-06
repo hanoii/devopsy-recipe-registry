@@ -56,7 +56,10 @@ devopsy @prod gc --dry-run   # only lists what would go
 ```
 
 `gc` removes untagged manifests and the layers nothing else uses. An image
-pushed only by digest, never tagged, counts as untagged.
+pushed only by digest, never tagged, counts as untagged. Older registry
+versions deleted the platform images of multi-platform tags this way; on
+3.1.2 a kept tag still pulls on every platform (checked with
+`crane export --platform`). Check again when upgrading the registry image.
 
 ## Locally
 
