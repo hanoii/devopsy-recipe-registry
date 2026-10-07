@@ -15,13 +15,13 @@ environment:
 echo DEVOPSY_TARGET_HOST=devopsy@203.0.113.10 >> .devopsy/.env
 ```
 
-It gets `<project>.<server's public domain>`, which
+It gets `<project>.<server's wildcard domain>`, which
 devopsy asks the server's Traefik for at each release. Override it, or set
 it empty for none, per target: `devopsy @prod --vars set --show
-DEVOPSY_PUBLIC_DOMAIN`.
+DEVOPSY_WILDCARD_DOMAIN`.
 
 ```sh
-devopsy @prod release          # runs deploy: https://registry-prod.<server's public domain>
+devopsy @prod release          # runs deploy: https://registry-prod.<server's wildcard domain>
 devopsy @prod credentials      # URL, user and password for docker login
 devopsy @prod logs -f registry
 ```

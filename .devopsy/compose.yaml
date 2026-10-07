@@ -38,7 +38,7 @@ services:
       start_interval: 1s
     labels:
       - traefik.enable=true
-      # <project>.<DEVOPSY_PUBLIC_DOMAIN> plus the target's DEVOPSY_DOMAINS.
+      # <project>.<DEVOPSY_WILDCARD_DOMAIN> plus the target's DEVOPSY_DOMAINS.
       # The fallback, for plain docker compose, is a HostRegexp: Traefik
       # requests no certificate for it, so a target without hosts logs no
       # ACME errors.
