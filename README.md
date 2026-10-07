@@ -16,7 +16,7 @@ echo DEVOPSY_TARGET_HOST=devopsy@203.0.113.10 >> .devopsy/.env
 ```
 
 ```sh
-devopsy @prod release deploy   # https://registry-prod.<server's public domain>
+devopsy @prod release          # runs deploy: https://registry-prod.<server's public domain>
 devopsy @prod credentials      # URL, user and password for docker login
 devopsy @prod logs -f registry
 ```

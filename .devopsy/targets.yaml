@@ -3,3 +3,7 @@
 # .devopsy/.env or the environment, like DEVOPSY_TARGET_HOST=devopsy@203.0.113.10.
 prod:
   path: /srv/registry-prod
+  release:
+    remote: deploy
+  rollback:
+    remote: deploy
