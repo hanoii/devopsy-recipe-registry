@@ -15,8 +15,16 @@ environment:
 echo DEVOPSY_TARGET_HOST=devopsy@203.0.113.10 >> .devopsy/.env
 ```
 
+Give it the server's public domain, so it gets
+`<project>.<domain>` (once per target; it stays in the server's
+`shared/.env`, out of this repository):
+
 ```sh
-devopsy @prod release          # runs deploy: https://registry-prod.<server's public domain>
+devopsy @prod --vars set --show DEVOPSY_PUBLIC_DOMAIN   # like vm1.example.com
+```
+
+```sh
+devopsy @prod release          # runs deploy: https://registry-prod.<DEVOPSY_PUBLIC_DOMAIN>
 devopsy @prod credentials      # URL, user and password for docker login
 devopsy @prod logs -f registry
 ```
