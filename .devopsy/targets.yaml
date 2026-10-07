@@ -6,6 +6,7 @@
 # with: devopsy @<target> --vars set --show DEVOPSY_WILDCARD_DOMAIN
 prod:
   path: /srv/registry-prod
+  mode: image
   release:
     remote: deploy
   rollback:
