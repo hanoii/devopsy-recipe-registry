@@ -1,7 +1,7 @@
 #!/bin/sh
 ## Description: Start or update the registry (run on the server by release)
 # The targets' release and rollback remote step (targets.yaml), run on the
-# server by `devopsy @<target> release` and `rollback`; or locally.
+# server by `devopsy @<target> --release` and `--rollback`; or locally.
 #
 # The first run generates the secrets into .env. Every run writes
 # mnt/auth/htpasswd when it does not match REGISTRY_USER and

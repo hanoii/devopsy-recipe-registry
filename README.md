@@ -21,7 +21,7 @@ it empty for none, per target: `devopsy @prod --vars set --show
 DEVOPSY_WILDCARD_DOMAIN`.
 
 ```sh
-devopsy @prod release          # runs deploy: https://registry-prod.<server's wildcard domain>
+devopsy @prod --release          # runs deploy: https://registry-prod.<server's wildcard domain>
 devopsy @prod credentials      # URL, user and password for docker login
 devopsy @prod logs -f registry
 ```
