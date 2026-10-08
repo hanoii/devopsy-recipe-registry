@@ -1,10 +1,17 @@
-# devopsy-recipe-registry
+# devopsy-template-registry
 
 A private Docker registry ([CNCF distribution](https://distribution.github.io/distribution/))
 on a [devopsy](https://github.com/hanoii/devopsy-cli) server, behind
-[devopsy-traefik](https://github.com/hanoii/devopsy-traefik), with a user and
+[devopsy-template-traefik](https://github.com/hanoii/devopsy-template-traefik), with a user and
 password. Use it for devopsy's image mode: build and push images from CI or a
 build server, and have each environment pull its commit's image.
+
+## Using this template
+
+A starting point to own, not a dependency: start a project from it on
+GitHub ("Use this template"), or clone it and keep this repository as a
+remote (`upstream`) to pull its changes when you choose. Nothing updates
+your copy, or what runs on your servers, but your own release.
 
 ## Try it
 
@@ -16,7 +23,7 @@ echo DEVOPSY_TARGET_HOST=devopsy@203.0.113.10 >> .devopsy/.env
 ```
 
 It gets `<project>.<server's wildcard domain>`, which
-each release imports from the server's proxy (devopsy-traefik), through the
+each release imports from the server's proxy (devopsy-template-traefik), through the
 `devopsy.import` label in `compose.yaml`: a release fails while no proxy
 runs. The release says what it imported; `devopsy @prod --debug imports`
 shows it later, and whether the proxy has changed it since. Override it,
@@ -71,8 +78,8 @@ versions deleted the platform images of multi-platform tags this way; on
 
 ## Locally
 
-With a local devopsy-traefik, the registry is at
-`https://devopsy-recipe-registry.localhost`:
+With a local devopsy-template-traefik, the registry is at
+`https://devopsy-template-registry.localhost`:
 
 ```sh
 devopsy deploy
