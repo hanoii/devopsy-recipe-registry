@@ -10,7 +10,7 @@
 project: registry
 defaults:
   mode: image
-  release: {remote: deploy}
-  rollback: {remote: deploy}
+  release: {prepare: secrets, run: deploy}
+  rollback: {prepare: secrets, run: deploy}
 environments:
   prod: {}

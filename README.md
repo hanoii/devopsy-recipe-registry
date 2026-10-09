@@ -46,8 +46,9 @@ docker push registry-prod.example.com/myapp:abc123
 
 ## How it works
 
-- **Secrets.** The first `deploy` generates `REGISTRY_PASSWORD` and
-  `REGISTRY_HTTP_SECRET` into the server's `shared/.env`. Every `deploy`
+- **Secrets.** The first release generates `REGISTRY_PASSWORD` and
+  `REGISTRY_HTTP_SECRET` into the server's `shared/.env` (`secrets`, its
+  prepare step, before it goes live). Every `deploy`
   checks `mnt/auth/htpasswd` against `REGISTRY_USER` (default `devopsy`) and
   `REGISTRY_PASSWORD`, and rewrites it (bcrypt, through `httpd`'s `htpasswd`)
   when they differ: to change the password, edit `shared/.env` and deploy.

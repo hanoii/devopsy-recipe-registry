@@ -3,7 +3,7 @@
 # shared/mnt/registry).
 #
 # REGISTRY_PASSWORD and REGISTRY_HTTP_SECRET are secrets in .devopsy/.env (on
-# servers shared/.env). `devopsy deploy` generates them on its first run, and
+# servers shared/.env). `devopsy secrets` generates them (a release runs it before going live), and
 # writes ./mnt/auth/htpasswd from REGISTRY_USER and REGISTRY_PASSWORD.
 services:
   registry:
@@ -18,7 +18,7 @@ services:
       REGISTRY_AUTH_HTPASSWD_REALM: ${COMPOSE_PROJECT_NAME:-registry}
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
       # Signs upload state between requests; must not change during uploads.
-      REGISTRY_HTTP_SECRET: ${REGISTRY_HTTP_SECRET:?run devopsy deploy once to generate it}
+      REGISTRY_HTTP_SECRET: ${REGISTRY_HTTP_SECRET:?run devopsy secrets to generate it}
       # Lets `docker manifest`/API deletes remove tags, so gc can free space.
       REGISTRY_STORAGE_DELETE_ENABLED: "true"
       # No OpenTelemetry collector here: do not try to send traces.

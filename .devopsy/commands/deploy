@@ -1,9 +1,9 @@
 #!/bin/sh
 ## Description: Start or update the registry (run on the server by release)
-# The targets' release and rollback remote step (config.yaml), run on the
+# The environments' release and rollback run step (config.yaml), run on the
 # server by `devopsy @<target> --release` and `--rollback`; or locally.
 #
-# The first run generates the secrets into .env. Every run writes
+# It generates missing secrets first (secrets). Every run writes
 # mnt/auth/htpasswd when it does not match REGISTRY_USER and
 # REGISTRY_PASSWORD, so changing the password in .env and deploying applies it.
 set -eu
@@ -11,19 +11,8 @@ set -eu
 env_file="$DEVOPSY_PROJECT_DIR/.env"
 auth_dir="$DEVOPSY_PROJECT_DIR/mnt/auth"
 
-# secret NAME: append a random value to .env unless NAME is already set there.
-secret() {
-  if ! grep -q "^$1=" "$env_file" 2>/dev/null; then
-    # Keep the new line separate when .env does not end with a newline.
-    if [ -s "$env_file" ] && [ "$(tail -c 1 "$env_file")" != "" ]; then
-      echo >> "$env_file"
-    fi
-    echo "$1=$(head -c 48 /dev/urandom | base64 | tr -d '\n' | tr '+/' '-_')" >> "$env_file"
-    echo "deploy: generated $1 in .env" >&2
-  fi
-}
-secret REGISTRY_PASSWORD
-secret REGISTRY_HTTP_SECRET
+# Secrets first, as the release's prepare step already did: for local use.
+devopsy secrets
 
 # The values as written in .env: they were just generated, or set by hand
 # (keep them unquoted).
