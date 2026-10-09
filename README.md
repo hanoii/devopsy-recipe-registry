@@ -79,7 +79,7 @@ versions deleted the platform images of multi-platform tags this way; on
 ## Locally
 
 With a local devopsy-template-traefik, the registry is at
-`https://devopsy-template-registry.localhost`:
+`https://registry.localhost` (the config's project name):
 
 ```sh
 devopsy deploy
